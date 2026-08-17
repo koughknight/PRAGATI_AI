@@ -1,0 +1,6 @@
+dataset_name,total_rows,total_cols,numeric_cols_count,categorical_cols_count,date_year_cols_count,geographic_cols_count,total_missing_cells,missing_cell_percentage,duplicate_rows_count,memory_usage_mb
+CENSUS_POPULATION_AREA,20018,15,10,5,0,0,592,0.2,15,7.3266
+INDIA_CENSUS_2011,640,25,22,0,0,3,0,0.0,0,0.0762
+NFHS_5_FACTSHEETS,111,136,32,3,92,9,257,1.7,0,0.1181
+RS_SESSION_262,65,3,0,1,0,1,0,0.0,0,0.0019
+TOURISM_STATISTICS,83,12,0,0,10,2,8,0.8,0,0.0087

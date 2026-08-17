@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRAGATI AI — Premium India Analytics Dashboard</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Leaflet CSS for India Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <!-- Plotly.js & Leaflet.js -->
+  <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+  <div id="app">
+    <!-- STICKY TOP HEADER -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="logo-badge">P</div>
+        <div class="title-group">
+          <h1>PRAGATI AI</h1>
+          <p>Data-Driven Intelligence for India's Growth</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="system-status-badge">
+          <span class="pulse-dot"></span>
+          <span>SYSTEM LIVE</span>
+        </div>
+
+        <!-- Prominent Live IST Clock -->
+        <div class="header-clock-container">
+          <div class="clock-date-group">
+            <span class="clock-date-text" id="live-date">15 AUG 2026</span>
+            <span class="clock-time-text" id="live-time">08:15:42 PM</span>
+          </div>
+          <span class="clock-ist-tag" id="live-ist">IST</span>
+        </div>
+
+        <div class="last-refresh-pill" id="last-data-refresh">
+          Last Refresh: Loading...
+        </div>
+
+        <button class="theme-toggle-btn" id="theme-toggle" title="Switch Light/Dark Theme">
+          <i class="fa-solid fa-moon"></i>
+          <span id="theme-label">Dark</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- DASHBOARD BODY -->
+    <div class="dashboard-body">
+      <!-- COMPACT SIDEBAR NAVIGATION -->
+      <nav class="sidebar">
+        <div class="nav-item active" data-view="command-center">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Command Center</span>
+        </div>
+        <div class="nav-item" data-view="india-intelligence">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span>India Intelligence</span>
+        </div>
+        <div class="nav-item" data-view="dataset-explorer">
+          <i class="fa-solid fa-database"></i>
+          <span>Dataset Explorer</span>
+        </div>
+        <div class="nav-item" data-view="advanced-analytics">
+          <i class="fa-solid fa-brain"></i>
+          <span>Advanced Analytics</span>
+        </div>
+        <div class="nav-item" data-view="decision-calculator">
+          <i class="fa-solid fa-calculator"></i>
+          <span>Decision Calculator</span>
+        </div>
+        <div class="nav-item" data-view="development-solutions">
+          <i class="fa-solid fa-lightbulb"></i>
+          <span>Development Solutions</span>
+        </div>
+        <div class="nav-item" data-view="reports">
+          <i class="fa-solid fa-file-contract"></i>
+          <span>Reports</span>
+        </div>
+        <div class="nav-item" data-view="pipeline-status">
+          <i class="fa-solid fa-network-wired"></i>
+          <span>Pipeline Status</span>
+        </div>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content">
+
+        <!-- 1. COMMAND CENTER (HERO LANDING PAGE) -->
+        <section id="view-command-center" class="view-section active">
+          <div class="command-hero-banner">
+            <span class="hero-tag"><i class="fa-solid fa-shield-halved"></i> National Decision Support System</span>
+            <h2>PRAGATI AI — National Intelligence Command Center</h2>
+            <p>Data-driven intelligence transforming India's demographic, health, disease, tourism, and regional development outputs into strategic decision support.</p>
+          </div>
+
+          <div class="card-grid">
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">Datasets Analyzed</span>
+                <div class="kpi-icon"><i class="fa-solid fa-layer-group"></i></div>
+              </div>
+              <div class="kpi-value" id="kpi-datasets">5</div>
+              <div class="kpi-subtext">Census, Health, Outbreaks, Tourism</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">Records Processed</span>
+                <div class="kpi-icon"><i class="fa-solid fa-table-list"></i></div>
+              </div>
+              <div class="kpi-value" id="kpi-records">20,818</div>
+              <div class="kpi-subtext">Verified Snowflake clean rows</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">Charts Generated</span>
+                <div class="kpi-icon"><i class="fa-solid fa-chart-pie"></i></div>
+              </div>
+              <div class="kpi-value" id="kpi-charts">18</div>
+              <div class="kpi-subtext">Interactive visual outputs</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">Data Quality</span>
+                <div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div>
+              </div>
+              <div class="kpi-value" id="kpi-quality">99.1%</div>
+              <div class="kpi-subtext">Verified completeness rate</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">Analytics Status</span>
+                <div class="kpi-icon"><i class="fa-solid fa-brain"></i></div>
+              </div>
+              <div class="kpi-value" id="kpi-analytics-status" style="font-size:22px; color: var(--brand-terracotta);">Phase 2B Active</div>
+              <div class="kpi-subtext">PCA, K-Means & YoY Models</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">Pipeline Status</span>
+                <div class="kpi-icon"><i class="fa-solid fa-network-wired"></i></div>
+              </div>
+              <div class="kpi-value" id="kpi-pipeline-status" style="font-size:22px; color: #2ECC71;">Connected</div>
+              <div class="kpi-subtext">Snowflake DB Sync Active</div>
+            </div>
+          </div>
+
+          <!-- Key Executive Highlights -->
+          <div class="chart-card">
+            <div class="chart-card-header-group">
+              <div class="chart-card-title"><i class="fa-solid fa-bullseye"></i> Executive Intelligence Summary</div>
+              <span class="source-badge">Real Analytics Output</span>
+            </div>
+            <div id="overview-insights-container">
+              <p>Loading real project insights...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. INDIA INTELLIGENCE -->
+        <section id="view-india-intelligence" class="view-section">
+          <div class="command-hero-banner" style="margin-bottom: 20px; padding: 20px 28px;">
+            <span class="hero-tag"><i class="fa-solid fa-map-location-dot"></i> Regional Intelligence Map</span>
+            <h2 style="font-size: 22px;">India State-Level Decision Support Map</h2>
+            <p style="font-size: 13px;">Select an indicator below to explore state rankings, population statistics, literacy rates, and healthcare metrics.</p>
+          </div>
+
+          <div class="map-controls">
+            <button class="btn-indicator active" data-metric="population">Population (Census 2011)</button>
+            <button class="btn-indicator" data-metric="literacy">Literacy Rate (%)</button>
+            <button class="btn-indicator" data-metric="health_insurance">Health Insurance Coverage (%)</button>
+            <button class="btn-indicator" data-metric="clean_fuel">Clean Cooking Fuel (%)</button>
+            <button class="btn-indicator" data-metric="child_anaemia">Child Anaemia Prevalence (%)</button>
+            <button class="btn-indicator" data-metric="sanitation">Improved Sanitation (%)</button>
+          </div>
+
+          <div class="map-layout-grid">
+            <div class="chart-card" style="margin-bottom:0;">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-map-location-dot"></i> Interactive India Geographic Map</div>
+                <span class="source-badge">Census 2011 & NFHS-5</span>
+              </div>
+              <div id="india-map-container" style="height: 520px; border-radius: 12px; overflow: hidden; background: #e5e0d8;"></div>
+            </div>
+
+            <div class="chart-card" style="margin-bottom:0;">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-flag-checkered"></i> State Intelligence Details</div>
+              </div>
+              <div id="state-detail-panel">
+                <p style="color: var(--text-muted);">Hover or click any Indian State on the map to inspect real demographic and health metrics.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. DATASET EXPLORER -->
+        <section id="view-dataset-explorer" class="view-section">
+          <div class="chart-card">
+            <div class="chart-card-header-group">
+              <div class="chart-card-title"><i class="fa-solid fa-database"></i> Discovered Datasets & Schema Profiling</div>
+              <span class="source-badge">Snowflake Database Schemas</span>
+            </div>
+            <p class="chart-sub-explanation">Comprehensive schema breakdown, column counts, missing value rates, and memory usage across all 5 clean Snowflake datasets.</p>
+
+            <div class="data-table-container">
+              <table class="data-table" id="dataset-summary-table">
+                <thead>
+                  <tr>
+                    <th>Dataset Name</th>
+                    <th>Total Records</th>
+                    <th>Columns</th>
+                    <th>Numeric Cols</th>
+                    <th>Categorical Cols</th>
+                    <th>Missing Cells</th>
+                    <th>Memory Usage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td colspan="7">Loading dataset metadata...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. ADVANCED ANALYTICS -->
+        <section id="view-advanced-analytics" class="view-section">
+          
+          <!-- SECTION A — EXECUTIVE ANALYTICS OVERVIEW -->
+          <div style="margin-bottom: 32px;">
+            <div class="command-hero-banner" style="margin-bottom: 20px; padding: 20px 28px;">
+              <span class="hero-tag"><i class="fa-solid fa-chart-line"></i> Executive Analytics Overview</span>
+              <h2 style="font-size: 22px;">Cross-Dataset Analytical Summary</h2>
+              <p style="font-size: 13px;">Cross-dataset analytical summary generated from the PRAGATI AI analytics pipeline.</p>
+            </div>
+
+            <!-- 1. Cross-Dataset PCA Variance Overview -->
+            <div class="chart-card" style="margin-bottom: 20px;">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-chart-pie"></i> Cross-Dataset PCA Variance Overview</div>
+                <span class="source-badge">Data Source: pca_results.csv</span>
+              </div>
+              <p class="chart-sub-explanation">Explained variance and cumulative variance step plots compressing multi-variable indicator matrices into core principal components.</p>
+              <div id="plotly-pca-chart" style="height: 380px; min-height: 380px;"></div>
+            </div>
+
+            <!-- 2. Cross-Dataset Clustering Overview -->
+            <div class="chart-card" style="margin-bottom: 20px;">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-diagram-project"></i> Cross-Dataset Clustering Overview</div>
+                <span class="source-badge">Data Source: clustering_results.csv</span>
+              </div>
+              <p class="chart-sub-explanation">Exploratory cluster distribution identifying urban vs rural sub-district groupings and regional healthcare vulnerability profiles.</p>
+              <div id="plotly-cluster-chart" style="height: 360px; min-height: 360px;"></div>
+            </div>
+
+            <!-- 3. Tourism / Temporal Trend Overview -->
+            <div class="chart-card" style="margin-bottom: 20px;">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-arrow-trend-down"></i> Tourism / Temporal Trend Overview (Foreign Tourist Arrivals 2017–2021)</div>
+                <span class="source-badge">Data Source: trend_analysis.csv</span>
+              </div>
+              <p class="chart-sub-explanation">YoY growth percentage line and bar analysis showing pre-pandemic baseline, 2020 pandemic contraction (-73.9%), and 2021 initial recovery trajectory.</p>
+              <div id="plotly-trend-chart" style="height: 380px; min-height: 380px;"></div>
+            </div>
+          </div>
+
+          <!-- SECTION B — ADVANCED VISUAL INTELLIGENCE (DATASET-AWARE) -->
+          <div style="border-top: 2px dashed var(--border-color); padding-top: 28px;">
+            <div class="command-hero-banner" style="margin-bottom: 20px; padding: 20px 28px;">
+              <span class="hero-tag"><i class="fa-solid fa-brain"></i> Advanced Visual Intelligence</span>
+              <h2 style="font-size: 22px;">Multi-Dimensional Dataset-Aware Visual Intelligence</h2>
+              <p style="font-size: 13px;">Dataset-aware statistical, clustering, dimensionality-reduction, correlation, outlier and temporal analysis.</p>
+              
+              <!-- DATASET SELECTOR BUTTONS -->
+              <div class="dataset-selector-bar" id="analytics-dataset-selector">
+                <button class="dataset-btn active" data-dataset="CENSUS_POPULATION_AREA" onclick="window.selectAnalyticsDataset('CENSUS_POPULATION_AREA')">
+                  <i class="fa-solid fa-database"></i> CENSUS_POPULATION_AREA
+                </button>
+                <button class="dataset-btn" data-dataset="INDIA_CENSUS_2011" onclick="window.selectAnalyticsDataset('INDIA_CENSUS_2011')">
+                  <i class="fa-solid fa-database"></i> INDIA_CENSUS_2011
+                </button>
+                <button class="dataset-btn" data-dataset="NFHS_5_FACTSHEETS" onclick="window.selectAnalyticsDataset('NFHS_5_FACTSHEETS')">
+                  <i class="fa-solid fa-database"></i> NFHS_5_FACTSHEETS
+                </button>
+                <button class="dataset-btn" data-dataset="RS_SESSION_262" onclick="window.selectAnalyticsDataset('RS_SESSION_262')">
+                  <i class="fa-solid fa-database"></i> RS_SESSION_262
+                </button>
+                <button class="dataset-btn" data-dataset="TOURISM_STATISTICS" onclick="window.selectAnalyticsDataset('TOURISM_STATISTICS')">
+                  <i class="fa-solid fa-database"></i> TOURISM_STATISTICS
+                </button>
+              </div>
+            </div>
+
+            <!-- 1. DATA-AWARE KPI STRIP (7 REQUIRED KPIS) -->
+            <div class="card-grid" style="margin-bottom: 24px;" id="analytics-kpi-strip">
+              <div class="kpi-card">
+                <div class="kpi-card-header">
+                  <span class="kpi-title">Records</span>
+                  <div class="kpi-icon"><i class="fa-solid fa-table-list"></i></div>
+                </div>
+                <div class="kpi-value" id="vi-kpi-records">N/A</div>
+                <div class="kpi-subtext" id="vi-kpi-records-sub">Total Rows</div>
+              </div>
+
+              <div class="kpi-card">
+                <div class="kpi-card-header">
+                  <span class="kpi-title">Features</span>
+                  <div class="kpi-icon"><i class="fa-solid fa-columns"></i></div>
+                </div>
+                <div class="kpi-value" id="vi-kpi-features">N/A</div>
+                <div class="kpi-subtext" id="vi-kpi-features-sub">Total Columns</div>
+              </div>
+
+              <div class="kpi-card">
+                <div class="kpi-card-header">
+                  <span class="kpi-title">Numeric Features</span>
+                  <div class="kpi-icon"><i class="fa-solid fa-hashtag"></i></div>
+                </div>
+                <div class="kpi-value" id="vi-kpi-num-features">N/A</div>
+                <div class="kpi-subtext" id="vi-kpi-num-features-sub">Numerical Columns</div>
+              </div>
+
+              <div class="kpi-card">
+                <div class="kpi-card-header">
+                  <span class="kpi-title">Outliers Detected</span>
+                  <div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                </div>
+                <div class="kpi-value" id="vi-kpi-outliers" style="color: var(--brand-terracotta);">N/A</div>
+                <div class="kpi-subtext" id="vi-kpi-outliers-sub">IQR Method Identified</div>
+              </div>
+
+              <div class="kpi-card">
+                <div class="kpi-card-header">
+                  <span class="kpi-title">Number of Clusters</span>
+                  <div class="kpi-icon"><i class="fa-solid fa-diagram-project"></i></div>
+                </div>
+                <div class="kpi-value" id="vi-kpi-clusters">N/A</div>
+                <div class="kpi-subtext" id="vi-kpi-clusters-sub">K-Means Model (k)</div>
+              </div>
+
+              <div class="kpi-card">
+                <div class="kpi-card-header">
+                  <span class="kpi-title">PCA Variance Explained</span>
+                  <div class="kpi-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                </div>
+                <div class="kpi-value" id="vi-kpi-pca-var" style="color: var(--brand-gold-dark);">N/A</div>
+                <div class="kpi-subtext" id="vi-kpi-pca-var-sub">Cumulative %</div>
+              </div>
+
+              <div class="kpi-card">
+                <div class="kpi-card-header">
+                  <span class="kpi-title">Strongest Correlation</span>
+                  <div class="kpi-icon"><i class="fa-solid fa-link"></i></div>
+                </div>
+                <div class="kpi-value" id="vi-kpi-max-corr" style="color: #2ECC71;">N/A</div>
+                <div class="kpi-subtext" id="vi-kpi-max-corr-sub">Peak Pearson Coeff</div>
+              </div>
+            </div>
+
+            <!-- 2. K-MEANS CLUSTER INTELLIGENCE -->
+            <div class="chart-card">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-diagram-project"></i> K-Means Cluster Intelligence</div>
+                <span class="source-badge" id="badge-cluster-dataset">CENSUS_POPULATION_AREA</span>
+              </div>
+              
+              <div id="container-cluster-intelligence">
+                <div class="cluster-kpi-strip" id="cluster-kpis">
+                  <div class="cluster-kpi-box">
+                    <div class="cluster-kpi-title">Number of Clusters (k)</div>
+                    <div class="cluster-kpi-val" id="ckpi-k">N/A</div>
+                  </div>
+                  <div class="cluster-kpi-box">
+                    <div class="cluster-kpi-title">Silhouette Score</div>
+                    <div class="cluster-kpi-val" id="ckpi-silhouette">N/A</div>
+                  </div>
+                  <div class="cluster-kpi-box">
+                    <div class="cluster-kpi-title">Largest Cluster</div>
+                    <div class="cluster-kpi-val" id="ckpi-largest">N/A</div>
+                  </div>
+                  <div class="cluster-kpi-box">
+                    <div class="cluster-kpi-title">Smallest Cluster</div>
+                    <div class="cluster-kpi-val" id="ckpi-smallest">N/A</div>
+                  </div>
+                </div>
+
+                <div class="intel-grid-2">
+                  <div>
+                    <h4 class="intel-subheading"><i class="fa-solid fa-chart-pie"></i> Cluster Size Distribution</h4>
+                    <div id="plotly-cluster-dist" style="height: 320px; min-height: 320px;"></div>
+                  </div>
+                  <div>
+                    <h4 class="intel-subheading"><i class="fa-solid fa-layer-group"></i> Cluster Profile Breakdown</h4>
+                    <div id="plotly-cluster-profile" style="height: 320px; min-height: 320px;"></div>
+                  </div>
+                </div>
+
+                <div id="cluster-insight-text" style="margin-top: 14px; font-size: 13px; font-weight: 600; color: var(--brand-terracotta); background: var(--bg-secondary); padding: 10px 14px; border-radius: 8px; border-left: 3px solid var(--brand-terracotta);">
+                  Analytical finding available in report output.
+                </div>
+              </div>
+
+              <div id="unavailable-cluster" class="unavailable-box" style="display: none;">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Clustering unavailable for this dataset because the dataset does not contain sufficient numerical features.</span>
+              </div>
+            </div>
+
+            <!-- 3. PCA INTELLIGENCE -->
+            <div class="chart-card">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-circle-nodes"></i> PCA Intelligence — Dimensionality Reduction</div>
+                <span class="source-badge" id="badge-pca-dataset">CENSUS_POPULATION_AREA</span>
+              </div>
+
+              <div id="container-pca-intelligence">
+                <div class="intel-grid-3">
+                  <div>
+                    <h4 class="intel-subheading"><i class="fa-solid fa-chart-scatter"></i> PC1 vs PC2 Scatter</h4>
+                    <div id="plotly-pca-scatter" style="height: 320px; min-height: 320px;"></div>
+                  </div>
+                  <div>
+                    <h4 class="intel-subheading"><i class="fa-solid fa-chart-column"></i> Variance Breakdown</h4>
+                    <div id="plotly-pca-variance" style="height: 320px; min-height: 320px;"></div>
+                  </div>
+                  <div>
+                    <h4 class="intel-subheading"><i class="fa-solid fa-align-left"></i> Top Feature Contributions</h4>
+                    <div id="plotly-pca-loadings" style="height: 320px; min-height: 320px;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="unavailable-pca" class="unavailable-box" style="display: none;">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>PCA unavailable for this dataset because insufficient numerical dimensions are available.</span>
+              </div>
+            </div>
+
+            <!-- 4. CORRELATION INTELLIGENCE -->
+            <div class="chart-card">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-border-all"></i> Correlation Intelligence Matrix</div>
+                <span class="source-badge" id="badge-correlation-dataset">CENSUS_POPULATION_AREA</span>
+              </div>
+              
+              <div id="container-correlation-intelligence">
+                <div class="corr-meta-strip" style="display: flex; gap: 16px; margin-bottom: 14px; flex-wrap: wrap;">
+                  <div class="cluster-kpi-box" style="flex: 1;">
+                    <div class="cluster-kpi-title">Strongest Positive Relationship</div>
+                    <div class="cluster-kpi-val" id="corr-strongest-pos" style="font-size: 13px; color: #2ECC71;">N/A</div>
+                  </div>
+                  <div class="cluster-kpi-box" style="flex: 1;">
+                    <div class="cluster-kpi-title">Strongest Negative Relationship</div>
+                    <div class="cluster-kpi-val" id="corr-strongest-neg" style="font-size: 13px; color: var(--brand-terracotta);">N/A</div>
+                  </div>
+                </div>
+                <div id="plotly-correlation-heatmap" style="height: 400px; min-height: 400px;"></div>
+              </div>
+
+              <div id="unavailable-correlation" class="unavailable-box" style="display: none;">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Correlation unavailable for this dataset because insufficient numerical features exist.</span>
+              </div>
+            </div>
+
+            <!-- 5. OUTLIER INTELLIGENCE -->
+            <div class="chart-card">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-triangle-exclamation"></i> Outlier Intelligence — IQR Method</div>
+                <span class="source-badge" id="badge-outlier-dataset">CENSUS_POPULATION_AREA</span>
+              </div>
+
+              <div id="container-outlier-intelligence">
+                <div class="intel-grid-2">
+                  <div>
+                    <h4 class="intel-subheading"><i class="fa-solid fa-sliders"></i> Numerical Feature Box Plots</h4>
+                    <div id="plotly-outlier-boxplot" style="height: 340px; min-height: 340px;"></div>
+                  </div>
+                  <div>
+                    <h4 class="intel-subheading"><i class="fa-solid fa-chart-donut"></i> Normal vs Outlier Observations</h4>
+                    <div id="plotly-outlier-donut" style="height: 340px; min-height: 340px;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="unavailable-outlier" class="unavailable-box" style="display: none;">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Outlier analysis unavailable for this dataset.</span>
+              </div>
+            </div>
+
+            <!-- 6. TEMPORAL TREND INTELLIGENCE -->
+            <div class="chart-card" id="card-temporal-trend-intelligence" style="display: none;">
+              <div class="chart-card-header-group">
+                <div class="chart-card-title"><i class="fa-solid fa-arrow-trend-down"></i> Temporal Trend Intelligence — YoY Analysis</div>
+                <span class="source-badge" id="badge-trend-dataset">TOURISM_STATISTICS</span>
+              </div>
+
+              <div id="container-trend-intelligence">
+                <p class="chart-sub-explanation">Year-over-Year (YoY) percentage growth trajectory and regional volume changes.</p>
+                <div id="plotly-trend-analysis-chart" style="height: 380px; min-height: 380px;"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. DECISION CALCULATORS (3 CALCULATORS) -->
+        <section id="view-decision-calculator" class="view-section">
+          <div class="command-hero-banner" style="margin-bottom: 24px; padding: 20px 28px;">
+            <span class="hero-tag"><i class="fa-solid fa-calculator"></i> Decision Support Tools</span>
+            <h2 style="font-size: 22px;">Interactive Decision Calculators</h2>
+            <p style="font-size: 13px;">Simulate scenarios for Tourism Revenue, Healthcare Bed & Doctor Gap, and Business Expansion Opportunity.</p>
+          </div>
+
+          <div class="calc-triple-grid">
+            <!-- 1. Tourism Opportunity Calculator -->
+            <div class="calc-card-box">
+              <div>
+                <div class="calc-title"><i class="fa-solid fa-plane-arrival"></i> Tourism Opportunity Calculator</div>
+                <div class="calc-form-group">
+                  <label>Expected Tourist Arrivals (Annual)</label>
+                  <input type="number" id="calc-tourists" class="calc-form-input" value="50000" step="5000">
+                </div>
+                <div class="calc-form-group">
+                  <label>Average Daily Spend per Tourist (INR ₹)</label>
+                  <input type="number" id="calc-spend" class="calc-form-input" value="4500" step="500">
+                </div>
+                <div class="calc-form-group">
+                  <label>Average Stay Duration (Days)</label>
+                  <input type="number" id="calc-stay" class="calc-form-input" value="4" step="1">
+                </div>
+                <button class="btn-indicator active" id="btn-calc-tourism" style="width:100%;">Calculate Tourism Revenue</button>
+              </div>
+
+              <div class="calc-result-box">
+                <div class="calc-res-label">Estimated Revenue</div>
+                <div class="calc-res-val" id="out-revenue">₹ 90.00 Cr</div>
+                <div class="calc-res-action" id="out-rec">Strategic Priority: High Growth Sector</div>
+                <span class="calc-estimate-tag">Scenario Estimate</span>
+              </div>
+            </div>
+
+            <!-- 2. Healthcare Resource Calculator -->
+            <div class="calc-card-box">
+              <div>
+                <div class="calc-title"><i class="fa-solid fa-hospital-user"></i> Healthcare Resource Calculator</div>
+                <div class="calc-form-group">
+                  <label>District Population</label>
+                  <input type="number" id="calc-health-pop" class="calc-form-input" value="1500000" step="100000">
+                </div>
+                <div class="calc-form-group">
+                  <label>Anaemia Prevalence Rate (%)</label>
+                  <input type="number" id="calc-anaemia-rate" class="calc-form-input" value="52.5" step="1">
+                </div>
+                <div class="calc-form-group">
+                  <label>Existing Hospital Beds per 1,000 People</label>
+                  <input type="number" id="calc-existing-beds" class="calc-form-input" value="0.8" step="0.1">
+                </div>
+                <button class="btn-indicator active" id="btn-calc-health" style="width:100%;">Calculate Hospital Bed Gap</button>
+              </div>
+
+              <div class="calc-result-box">
+                <div class="calc-res-label">Estimated Bed Deficit</div>
+                <div class="calc-res-val" id="out-bed-deficit">1,800 Beds</div>
+                <div class="calc-res-action" id="out-health-priority">Priority Tier: High Priority Demand</div>
+                <span class="calc-estimate-tag">Model Estimate</span>
+              </div>
+            </div>
+
+            <!-- 3. Business Expansion Calculator -->
+            <div class="calc-card-box">
+              <div>
+                <div class="calc-title"><i class="fa-solid fa-chart-line-up"></i> Business Expansion Calculator</div>
+                <div class="calc-form-group">
+                  <label>Target Market Population</label>
+                  <input type="number" id="calc-biz-pop" class="calc-form-input" value="800000" step="50000">
+                </div>
+                <div class="calc-form-group">
+                  <label>District Literacy Rate (%)</label>
+                  <input type="number" id="calc-biz-literacy" class="calc-form-input" value="78.5" step="1">
+                </div>
+                <div class="calc-form-group">
+                  <label>Non-Agricultural Worker Ratio (%)</label>
+                  <input type="number" id="calc-biz-nonagri" class="calc-form-input" value="62.0" step="1">
+                </div>
+                <button class="btn-indicator active" id="btn-calc-biz" style="width:100%;">Evaluate Market Opportunity</button>
+              </div>
+
+              <div class="calc-result-box">
+                <div class="calc-res-label">Opportunity Score</div>
+                <div class="calc-res-val" id="out-biz-score">82.4 / 100</div>
+                <div class="calc-res-action" id="out-biz-rec">Recommendation: Favorable for Regional Expansion</div>
+                <span class="calc-estimate-tag">Scenario Estimate</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. DEVELOPMENT SOLUTIONS (6 CARDS) -->
+        <section id="view-development-solutions" class="view-section">
+          <div class="command-hero-banner" style="margin-bottom: 24px; padding: 20px 28px;">
+            <span class="hero-tag"><i class="fa-solid fa-lightbulb"></i> Strategic Action Framework</span>
+            <h2 style="font-size: 22px;">India Growth & Development Solutions</h2>
+            <p style="font-size: 13px;">Data-driven decision support converting analytical findings into targeted development opportunities.</p>
+          </div>
+
+          <div class="solutions-grid" id="solutions-container">
+            <!-- Rendered dynamically by solutions.js -->
+          </div>
+        </section>
+
+        <!-- 7. REPORTS -->
+        <section id="view-reports" class="view-section">
+          <div id="report-execution-container">
+            <p>Loading execution report...</p>
+          </div>
+        </section>
+
+        <!-- 8. PIPELINE STATUS -->
+        <section id="view-pipeline-status" class="view-section">
+          <!-- Visual Data Journey Flowchart -->
+          <div class="chart-card">
+            <div class="chart-card-title"><i class="fa-solid fa-diagram-next"></i> End-to-End Data Pipeline Journey</div>
+            <p class="chart-sub-explanation">Data processing lifecycle from raw data acquisition to decision support deployment.</p>
+
+            <div class="pipeline-flow-container">
+              <div class="pipeline-node completed">
+                <div class="pipeline-node-name">RAW DATA</div>
+                <div class="pipeline-node-status" style="color:#2ECC71;">✓ Ingested</div>
+              </div>
+              <span class="pipeline-arrow">➔</span>
+              <div class="pipeline-node completed">
+                <div class="pipeline-node-name">ETL CLEANING</div>
+                <div class="pipeline-node-status" style="color:#2ECC71;">✓ Completed</div>
+              </div>
+              <span class="pipeline-arrow">➔</span>
+              <div class="pipeline-node completed">
+                <div class="pipeline-node-name">SNOWFLAKE</div>
+                <div class="pipeline-node-status" style="color:#2ECC71;">✓ Loaded</div>
+              </div>
+              <span class="pipeline-arrow">➔</span>
+              <div class="pipeline-node completed">
+                <div class="pipeline-node-name">PROFILING</div>
+                <div class="pipeline-node-status" style="color:#2ECC71;">✓ 4 Reports</div>
+              </div>
+              <span class="pipeline-arrow">➔</span>
+              <div class="pipeline-node completed">
+                <div class="pipeline-node-name">ANALYTICS</div>
+                <div class="pipeline-node-status" style="color:#2ECC71;">✓ PCA/K-Means</div>
+              </div>
+              <span class="pipeline-arrow">➔</span>
+              <div class="pipeline-node completed">
+                <div class="pipeline-node-name">INSIGHTS</div>
+                <div class="pipeline-node-status" style="color:#2ECC71;">✓ Generated</div>
+              </div>
+              <span class="pipeline-arrow">➔</span>
+              <div class="pipeline-node active">
+                <div class="pipeline-node-name">DASHBOARD</div>
+                <div class="pipeline-node-status" style="color:var(--brand-terracotta);">● Active</div>
+              </div>
+              <span class="pipeline-arrow">➔</span>
+              <div class="pipeline-node active">
+                <div class="pipeline-node-name">DECISION SUPPORT</div>
+                <div class="pipeline-node-status" style="color:var(--brand-gold-dark);">● Live</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-grid">
+            <div class="kpi-card">
+              <div class="kpi-card-header"><span class="kpi-title">Snowflake DB</span><i class="fa-solid fa-snowflake kpi-icon"></i></div>
+              <div class="kpi-value" style="color:#2ECC71;">Connected</div>
+              <div class="kpi-subtext">PRAGATI_AI_DB.CLEAN_DATA</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-card-header"><span class="kpi-title">ETL Pipeline</span><i class="fa-solid fa-gears kpi-icon"></i></div>
+              <div class="kpi-value" style="color:#2ECC71;">Completed</div>
+              <div class="kpi-subtext">5 Clean CSV Exports</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-card-header"><span class="kpi-title">Data Profiler</span><i class="fa-solid fa-magnifying-glass-chart kpi-icon"></i></div>
+              <div class="kpi-value" style="color:#2ECC71;">Completed</div>
+              <div class="kpi-subtext">4 Reports Generated</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-card-header"><span class="kpi-title">Dashboard Server</span><i class="fa-solid fa-server kpi-icon"></i></div>
+              <div class="kpi-value" style="color:#2ECC71;">Live (8501)</div>
+              <div class="kpi-subtext">HTTP REST API Active</div>
+            </div>
+          </div>
+
+          <!-- UiPath Automation Integration Status Section -->
+          <div class="chart-card" style="margin-top: 24px;">
+            <div class="chart-card-header-group">
+              <div class="chart-card-title">
+                <i class="fa-solid fa-robot" style="color: var(--brand-terracotta);"></i> UiPath Automation Status
+              </div>
+              <span class="source-badge">D:\CLT\PRAGATI_AI\uiPath_status.json</span>
+            </div>
+            <div id="uipath-status-container">
+              <p style="color: var(--text-muted);">Loading UiPath status...</p>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/reports.js?v=2.2"></script>
+  <script src="js/app.js?v=2.2"></script>
+  <script src="js/india_map.js?v=2.2"></script>
+  <script src="js/charts.js?v=2.2"></script>
+  <script src="js/calculators.js?v=2.2"></script>
+  <script src="js/solutions.js?v=2.2"></script>
+</body>
+</html>

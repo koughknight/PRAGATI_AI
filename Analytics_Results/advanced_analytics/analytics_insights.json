@@ -1,0 +1,34 @@
+{
+  "project": "PRAGATI AI",
+  "phase": "Phase 2B Advanced Analytics Engine",
+  "status": "COMPLETED",
+  "datasets_analyzed": 5,
+  "generated_charts_count": 18,
+  "insights_summary": {
+    "CENSUS_POPULATION_AREA": {
+      "rows": 20018,
+      "cols": 15,
+      "key_finding": "High variance in sub-district land area and population metrics; PCA & K-Means identified distinct rural vs urban sub-district clusters."
+    },
+    "INDIA_CENSUS_2011": {
+      "rows": 640,
+      "cols": 25,
+      "key_finding": "Strong correlation between literacy rate and worker non-agricultural participation across 640 census districts."
+    },
+    "NFHS_5_FACTSHEETS": {
+      "rows": 111,
+      "cols": 136,
+      "key_finding": "Significant regional variance in healthcare access and anaemia indicators; PCA compressed 32 numeric health indicators into core health vulnerability components."
+    },
+    "RS_SESSION_262": {
+      "rows": 65,
+      "cols": 3,
+      "key_finding": "Acute Diarrheal Disease and Food Poisoning accounted for the largest proportion of disease outbreaks recorded in Session 262. PCA/K-Means skipped due to single numerical column."
+    },
+    "TOURISM_STATISTICS": {
+      "rows": 83,
+      "cols": 12,
+      "key_finding": "Temporal analysis reveals severe contraction in foreign tourist arrivals in 2020 (-73.9% average drop) due to COVID-19 pandemic restrictions, followed by partial recovery in 2021."
+    }
+  }
+}

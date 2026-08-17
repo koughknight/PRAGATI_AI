@@ -1,0 +1,6 @@
+{
+  "Name": "PRAGATI_AI_EXECUTOR",
+  "ProjectType": "Process",
+  "Description": "EXECUTOR",
+  "MainFile": "Main.xaml"
+}

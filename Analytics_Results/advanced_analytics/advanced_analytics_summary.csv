@@ -1,0 +1,6 @@
+dataset_name,rows,cols,numeric_cols,descriptive_analysis,correlation_analysis,outlier_analysis,trend_analysis,pca_analysis,kmeans_clustering
+CENSUS_POPULATION_AREA,20018,15,12,COMPLETED,COMPLETED,COMPLETED,SKIPPED (Non-temporal dataset),COMPLETED,COMPLETED
+INDIA_CENSUS_2011,640,25,23,COMPLETED,COMPLETED,COMPLETED,SKIPPED (Non-temporal dataset),COMPLETED,COMPLETED
+NFHS_5_FACTSHEETS,111,136,134,COMPLETED,COMPLETED,COMPLETED,SKIPPED (Non-temporal dataset),COMPLETED,COMPLETED
+RS_SESSION_262,65,3,1,COMPLETED,SKIPPED (Insufficient numeric cols),COMPLETED,SKIPPED (Non-temporal dataset),SKIPPED (Insufficient dimensionality),SKIPPED (Insufficient dimensionality)
+TOURISM_STATISTICS,83,12,10,COMPLETED,COMPLETED,COMPLETED,COMPLETED,COMPLETED,COMPLETED
