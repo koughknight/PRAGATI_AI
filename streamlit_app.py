@@ -32,44 +32,39 @@ from dashboard_server import (
 )
 from src.snowflake.connection import get_snowflake_connection
 
-# Page setup
+# Page setup - Full Width, Collapsed Sidebar
 st.set_page_config(
     page_title="PRAGATI AI — India Growth & Census Analytics",
     page_icon="🇮🇳",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for Streamlit sidebar & container styling
+# Custom CSS to completely hide default Streamlit sidebar & expand dashboard to 100% full width
 st.markdown("""
 <style>
+    /* Hide Streamlit default sidebar & collapse toggle control */
+    [data-testid="stSidebar"], section[data-testid="stSidebar"] {
+        display: none !important;
+    }
+    [data-testid="stSidebarCollapseButton"], button[data-testid="stSidebarCollapseButton"] {
+        display: none !important;
+    }
+    [data-testid="stHeader"] {
+        background-color: transparent !important;
+        height: 0rem !important;
+    }
     .stApp {
         background-color: #0b0f19;
         color: #f8fafc;
     }
-    .metric-card {
-        background-color: #111827;
-        border: 1px solid #1e293b;
-        border-radius: 12px;
-        padding: 20px;
-        text-align: center;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    }
-    .metric-val {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #38bdf8;
-    }
-    .metric-lbl {
-        font-size: 0.9rem;
-        color: #94a3b8;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-top: 4px;
-    }
-    [data-testid="stSidebar"] {
-        background-color: #0f172a;
-        border-right: 1px solid #1e293b;
+    /* Remove padding around container for full screen dashboard layout */
+    .block-container {
+        padding-top: 0rem !important;
+        padding-bottom: 0rem !important;
+        padding-left: 0rem !important;
+        padding-right: 0rem !important;
+        max-width: 100% !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -261,120 +256,9 @@ def get_inlined_dashboard_html(api_payloads):
 
 
 def main():
-    st.sidebar.title("🇮🇳 PRAGATI AI")
-    st.sidebar.markdown("**Census & Healthcare Analytics System**")
-    st.sidebar.markdown("---")
-
-    view_mode = st.sidebar.radio(
-        "Select Application View:",
-        [
-            "🌟 Interactive Web Dashboard (Premium UI)",
-            "📊 Executive KPI Command Center",
-            "🗺️ State Intelligence & Map Metrics",
-            "📁 Datasets & Profiling Summary",
-            "📈 Advanced Analytics (PCA/Clustering)",
-            "📝 Markdown Reports & Automation Logs",
-            "⚡ Snowflake Connection Status"
-        ]
-    )
-
     api_payloads = prepare_api_payloads()
-    summary = api_payloads["/api/summary"]
-
-    if view_mode == "🌟 Interactive Web Dashboard (Premium UI)":
-        html_code = get_inlined_dashboard_html(api_payloads)
-        components.html(html_code, height=940, scrolling=True)
-
-    elif view_mode == "📊 Executive KPI Command Center":
-        st.header("📊 Executive KPI Command Center")
-        st.caption("Real-Time Analytics Metrics & Data Quality Assurance")
-
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.metric("Total Records Processed", f"{summary['total_records']:,}")
-        with col2:
-            st.metric("Datasets Analyzed", summary['datasets_analyzed'])
-        with col3:
-            st.metric("Data Quality Score", f"{summary['data_quality_pct']}%")
-        with col4:
-            st.metric("Outliers Identified", f"{summary['outliers_detected']:,}")
-
-        st.markdown("---")
-        st.subheader("System Pipeline Overview")
-        p_col1, p_col2, p_col3, p_col4 = st.columns(4)
-        p_col1.info(f"**ETL Pipeline**: {summary['etl_status']}")
-        p_col2.info(f"**Data Profiling**: {summary['profiling_status']}")
-        p_col3.info(f"**Advanced Analytics**: {summary['advanced_analytics_status']}")
-        p_col4.success(f"**Snowflake Status**: {summary['snowflake_status']}")
-
-    elif view_mode == "🗺️ State Intelligence & Map Metrics":
-        st.header("🗺️ India State-Level Intelligence")
-        st.caption("Aggregated Demographics & Health Factsheet Data by State")
-
-        map_data = api_payloads["/api/india-map"]["states"]
-        if map_data:
-            df_states = pd.DataFrame(list(map_data.values()))
-            cols_to_show = ["state_name", "population", "literacy_rate", "worker_ratio", "sex_ratio", "district_count"]
-            available_cols = [c for c in cols_to_show if c in df_states.columns]
-            st.dataframe(df_states[available_cols].sort_values(by="population", ascending=False), use_container_width=True)
-        else:
-            st.warning("No state data available.")
-
-    elif view_mode == "📁 Datasets & Profiling Summary":
-        st.header("📁 Datasets & Data Profiling")
-        st.caption("Census 2011, NFHS-5, Tourism Statistics, Villages, and RS Session 262")
-
-        datasets = api_payloads["/api/datasets"]["summary"]
-        if datasets:
-            st.dataframe(pd.DataFrame(datasets), use_container_width=True)
-        else:
-            st.warning("No profiling summary files found.")
-
-    elif view_mode == "📈 Advanced Analytics (PCA/Clustering)":
-        st.header("📈 Advanced Analytics & Machine Learning")
-        st.caption("PCA Dimensionality Reduction, K-Means Clustering & Correlation Outputs")
-
-        analytics = api_payloads["/api/analytics"]
-        tab1, tab2, tab3 = st.tabs(["Descriptive Statistics", "Correlation Matrix", "Outlier Analysis"])
-        with tab1:
-            if analytics["descriptive_statistics"]:
-                st.dataframe(pd.DataFrame(analytics["descriptive_statistics"]), use_container_width=True)
-        with tab2:
-            if analytics["correlation"]:
-                st.dataframe(pd.DataFrame(analytics["correlation"]), use_container_width=True)
-        with tab3:
-            if analytics["outliers"]:
-                st.dataframe(pd.DataFrame(analytics["outliers"]), use_container_width=True)
-
-    elif view_mode == "📝 Markdown Reports & Automation Logs":
-        st.header("📝 Executive Reports & System Logs")
-
-        reports = api_payloads["/api/reports"]
-        report_choice = st.selectbox("Select Report to View:", ["Advanced Analytics Report", "Snowflake Extraction Report"])
-        if report_choice == "Advanced Analytics Report":
-            st.markdown(reports["advanced_analytics_report"])
-        else:
-            st.markdown(reports["snowflake_extraction_report"])
-
-    elif view_mode == "⚡ Snowflake Connection Status":
-        st.header("⚡ Snowflake Connection Status")
-        st.markdown("Test live connection to Snowflake data warehouse using configured secrets / environment variables.")
-
-        if st.button("🔌 Test Snowflake Connection Now"):
-            with st.spinner("Connecting to Snowflake..."):
-                try:
-                    conn = get_snowflake_connection(prompt_password_if_missing=False)
-                    cursor = conn.cursor()
-                    cursor.execute("SELECT CURRENT_ACCOUNT(), CURRENT_WAREHOUSE(), CURRENT_DATABASE(), CURRENT_SCHEMA()")
-                    res = cursor.fetchone()
-                    st.success(f"✅ Successfully Connected to Snowflake!\n- Account: `{res[0]}`\n- Warehouse: `{res[1]}`\n- Database: `{res[2]}`\n- Schema: `{res[3]}`")
-                    cursor.close()
-                    conn.close()
-                except Exception as e:
-                    st.error(f"❌ Snowflake Connection Error: {e}")
-
-    st.sidebar.markdown("---")
-    st.sidebar.caption(f"Last Refreshed: {summary['last_data_refresh']}")
+    html_code = get_inlined_dashboard_html(api_payloads)
+    components.html(html_code, height=980, scrolling=True)
 
 
 if __name__ == "__main__":
