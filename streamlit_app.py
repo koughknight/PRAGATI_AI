@@ -40,31 +40,48 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS to completely hide default Streamlit sidebar & expand dashboard to 100% full width
+# Custom CSS to completely hide default Streamlit sidebar & collapse controls across all Streamlit versions
 st.markdown("""
 <style>
-    /* Hide Streamlit default sidebar & collapse toggle control */
-    [data-testid="stSidebar"], section[data-testid="stSidebar"] {
+    /* Completely hide default Streamlit sidebar & sidebar controls */
+    [data-testid="stSidebar"],
+    section[data-testid="stSidebar"],
+    [data-testid="stSidebarNav"],
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="stSidebarCollapseButton"],
+    div[data-testid="stSidebarUserContent"],
+    button[data-testid="stSidebarCollapsedControl"],
+    button[data-testid="stSidebarCollapseButton"],
+    .stSidebar {
         display: none !important;
+        width: 0px !important;
+        height: 0px !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
-    [data-testid="stSidebarCollapseButton"], button[data-testid="stSidebarCollapseButton"] {
-        display: none !important;
-    }
+    
+    /* Make header transparent and zero height */
     [data-testid="stHeader"] {
         background-color: transparent !important;
         height: 0rem !important;
+        display: none !important;
     }
+    
+    /* App background */
     .stApp {
         background-color: #0b0f19;
         color: #f8fafc;
     }
-    /* Remove padding around container for full screen dashboard layout */
-    .block-container {
+    
+    /* Remove padding around main block-container to give PRAGATI AI 100% full browser width */
+    .block-container, div[data-testid="stBlock"] {
         padding-top: 0rem !important;
         padding-bottom: 0rem !important;
         padding-left: 0rem !important;
         padding-right: 0rem !important;
         max-width: 100% !important;
+        width: 100% !important;
     }
 </style>
 """, unsafe_allow_html=True)
